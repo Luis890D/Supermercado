@@ -15,11 +15,9 @@ public class app_Supermercado1 {
      */
     public static void main(String[] args) {
 
-        mnProducto menu = new mnProducto();
-        menu.iniciar();
-
-        //mnCategoria categoriaProducto = new mnCategoria();
-        //categoriaProducto.iniciar(); 
+        GestionInventario gestion = new GestionInventario();
+        gestion.iniciar();
+        
     }
 
 }

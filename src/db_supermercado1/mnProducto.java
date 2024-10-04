@@ -134,40 +134,61 @@ public class mnProducto {
     public void iniciar() {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.print("¿Deseas agregar, actualizar o eliminar un producto? (a/u/e): ");
-        String opcion = scanner.nextLine();
+        int opcion;
 
-        if (opcion.equalsIgnoreCase("a")) {
+        do {
+            System.out.println("\n=== Gestión de Productos ===");
+            System.out.println("1. Agregar producto");
+            System.out.println("2. Actualizar producto");
+            System.out.println("3. Eliminar producto");
+            System.out.println("4. Volver atrás");
+            System.out.print("Selecciona una opción: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();  // Consumir nueva línea
 
-            System.out.print("Ingresa el nombre del producto: ");
-            String nombreProducto = scanner.nextLine();
+            switch (opcion) {
+                case 1:
+                    System.out.print("Ingresa el nombre del producto: ");
+                    String nombreProducto = scanner.nextLine();
 
-            System.out.print("Ingresa el codigo del producto: ");
-            double codigo = scanner.nextDouble();
+                    System.out.print("Ingresa el código del producto: ");
+                    double codigo = scanner.nextDouble();
 
-            System.out.print("Ingresa el precio del producto: ");
-            double precio = scanner.nextDouble();
+                    System.out.print("Ingresa el precio del producto: ");
+                    double precio = scanner.nextDouble();
 
-            System.out.print("Ingresa la promocion del producto: ");
-            double promocion = scanner.nextDouble();
+                    System.out.print("Ingresa la promoción del producto: ");
+                    double promocion = scanner.nextDouble();
 
-            System.out.print("Ingresa el id de la categoría: ");
-            int idCategoria = scanner.nextInt();
+                    System.out.print("Ingresa el id de la categoría: ");
+                    int idCategoria = scanner.nextInt();
 
-            // Llamar al método para agregar el producto
-            this.addProducto(nombreProducto, codigo, promocion, precio, idCategoria);
-        } else if (opcion.equalsIgnoreCase("u")) {
-            // Actualizar producto
-            System.out.print("Ingresa el ID del producto a actualizar: ");
-            int idProducto = scanner.nextInt();
-            scanner.nextLine();
-            updateProducto(idProducto);
-        } else if (opcion.equalsIgnoreCase(
-                "e")) {
-            // Eliminar producto
-            System.out.print("Ingresa el código del producto a eliminar: ");
-            double codigoProducto = scanner.nextDouble();
-            deleteProducto(codigoProducto);
-        }
+                    scanner.nextLine(); // Consumir la nueva línea
+                    addProducto(nombreProducto, codigo, promocion, precio, idCategoria);
+                    break;
+
+                case 2:
+                    System.out.print("Ingresa el ID del producto a actualizar: ");
+                    int idProducto = scanner.nextInt();
+                    scanner.nextLine(); // Consumir la nueva línea
+                    updateProducto(idProducto);
+                    break;
+
+                case 3:
+                    System.out.print("Ingresa el código del producto a eliminar: ");
+                    double codigoProducto = scanner.nextDouble();
+                    scanner.nextLine(); // Consumir la nueva línea
+                    deleteProducto(codigoProducto);
+                    break;
+
+                case 4:
+                    System.out.println("Volviendo atrás...");
+                    break;
+
+                default:
+                    System.out.println("Opción inválida. Inténtalo nuevamente.");
+                    break;
+            }
+        } while (opcion != 4);  // Termina el bucle cuando se selecciona "volver atrás"
     }
 }

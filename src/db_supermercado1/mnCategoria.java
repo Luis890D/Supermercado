@@ -47,7 +47,7 @@ public class mnCategoria {
                 System.out.println("Productos de la categoría seleccionada:");
 
                 boolean tieneProductos = false;
-                
+
                 while (rs.next()) {
                     String nombreProducto = rs.getString("nombre_producto");
                     Long codigo = rs.getLong("codigo");
@@ -74,15 +74,37 @@ public class mnCategoria {
 
     public void iniciar() {
         Scanner scanner = new Scanner(System.in);
+        String opcion;
 
-        // Mostrar las categorías
-        mostrarCategorias();
+        do {
+            System.out.println("=== Gestión de Categorías ===");
+            System.out.println("1. Mostrar categorías y productos");
+            System.out.println("2. Volver atrás");
+            System.out.print("Selecciona una opción: ");
+            opcion = scanner.nextLine();
 
-        // Solicitar al usuario que seleccione una categoría
-        System.out.print("Selecciona el ID de la categoría que deseas ver: ");
-        int idCategoriaSeleccionada = scanner.nextInt();
+            switch (opcion) {
+                case "1":
+                    // Mostrar las categorías
+                    mostrarCategorias();
 
-        // Mostrar los productos de la categoría seleccionada
-        mostrarProductosPorCategoria(idCategoriaSeleccionada);
+                    // Solicitar al usuario que seleccione una categoría
+                    System.out.print("Selecciona el ID de la categoría que deseas ver: ");
+                    int idCategoriaSeleccionada = scanner.nextInt();
+                    scanner.nextLine(); // Consumir el salto de línea
+
+                    // Mostrar los productos de la categoría seleccionada
+                    mostrarProductosPorCategoria(idCategoriaSeleccionada);
+                    break;
+
+                case "2":
+                    System.out.println("Volviendo al menú principal...");
+                    break;
+
+                default:
+                    System.out.println("Opción no válida. Intenta nuevamente.");
+            }
+
+        } while (!opcion.equals("2"));
     }
 }
