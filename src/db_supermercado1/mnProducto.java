@@ -163,7 +163,7 @@ public class mnProducto {
                     System.out.print("Ingresa el id de la categoría: ");
                     int idCategoria = scanner.nextInt();
 
-                    scanner.nextLine(); // Consumir la nueva línea
+                    scanner.nextLine();
                     addProducto(nombreProducto, codigo, promocion, precio, idCategoria);
                     break;
 
