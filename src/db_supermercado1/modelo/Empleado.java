@@ -11,7 +11,7 @@ import java.util.Date;
  * @author luisd
  */
 public class Empleado {
-    
+
     private int idEmpleado;
     private String nombreEmpleado;
     private String apellidoEmpleado;
@@ -22,6 +22,25 @@ public class Empleado {
     private Date horario;
 
     public Empleado() {
+    }
+
+    public Empleado(String nombreEmpleado, String apellidoEmpleado, String codigo, String direccion, String numeroTelefono, Date horario) {
+        this.nombreEmpleado = nombreEmpleado;
+        this.apellidoEmpleado = apellidoEmpleado;
+        this.codigo = codigo;
+        this.direccion = direccion;
+        this.numeroTelefono = numeroTelefono;
+        this.horario = horario;
+    }
+
+    public Empleado(int idEmpleado, String nombreEmpleado, String apellidoEmpleado, String codigo, String direccion, String numeroTelefono, Date horario) {
+        this.idEmpleado = idEmpleado;
+        this.nombreEmpleado = nombreEmpleado;
+        this.apellidoEmpleado = apellidoEmpleado;
+        this.codigo = codigo;
+        this.direccion = direccion;
+        this.numeroTelefono = numeroTelefono;
+        this.horario = horario;
     }
 
     public Empleado(String nombreEmpleado, String apellidoEmpleado, String codigo, String direccion, String caja, String numeroTelefono, Date horario) {
@@ -108,6 +127,18 @@ public class Empleado {
     public void setHorario(Date horario) {
         this.horario = horario;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Empleado{"
+                + "ID: " + idEmpleado
+                + ", Nombre: '" + nombreEmpleado + '\''
+                + ", Apellido: '" + apellidoEmpleado + '\''
+                + ", Código: '" + codigo + '\''
+                + ", Dirección: '" + direccion + '\''
+                + ", Número de Teléfono: '" + numeroTelefono + '\''
+                + ", Horario: '" + horario + '\''
+                + '}';
+    }
+
 }

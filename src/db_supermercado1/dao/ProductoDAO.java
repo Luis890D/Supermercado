@@ -126,59 +126,57 @@ public class ProductoDAO {
         StringBuilder sql = new StringBuilder("UPDATE Productos SET ");
         boolean primerCampo = true;
 
-        System.out.println("¿Deseas cambiar el nombre del producto? (s/n)");
-        if (scanner.nextLine().equalsIgnoreCase("s")) {
-            System.out.print("Ingresa el nuevo nombre: ");
-            String nuevoNombre = scanner.nextLine();
-            sql.append("nombre_producto = '").append(nuevoNombre).append("'");
-            primerCampo = false;
-        }
+        System.out.println("Seleccione el campo a actualizar:");
+        System.out.println("1. Nombre del Producto");
+        System.out.println("2. Código");
+        System.out.println("3. Precio");
+        System.out.println("4. Promoción");
+        System.out.println("5. ID de la Categoría");
+        int opcion = scanner.nextInt();
+        scanner.nextLine();  // Consumir nueva línea
 
-        System.out.println("¿Deseas cambiar el código del producto? (s/n)");
-        if (scanner.nextLine().equalsIgnoreCase("s")) {
-            System.out.print("Ingresa el nuevo código: ");
-            int nuevoCodigo = scanner.nextInt();
-            if (!primerCampo) {
-                sql.append(", ");
-            }
-            sql.append("codigo = ").append(nuevoCodigo);
-            primerCampo = false;
-            scanner.nextLine();
-        }
+        switch (opcion) {
+            case 1:
+                System.out.print("Ingrese el nuevo nombre: ");
+                String nuevoNombre = scanner.nextLine();
+                sql.append("nombre_producto = '").append(nuevoNombre).append("'");
+                primerCampo = false;
+                break;
 
-        System.out.println("¿Deseas cambiar el precio del producto? (s/n)");
-        if (scanner.nextLine().equalsIgnoreCase("s")) {
-            System.out.print("Ingresa el nuevo precio: ");
-            double nuevoPrecio = scanner.nextDouble();
-            if (!primerCampo) {
-                sql.append(", ");
-            }
-            sql.append("precio = ").append(nuevoPrecio);
-            primerCampo = false;
-            scanner.nextLine();
-        }
+            case 2:
+                System.out.print("Ingrese el nuevo código: ");
+                int nuevoCodigo = scanner.nextInt();
+                sql.append("codigo = ").append(nuevoCodigo);
+                scanner.nextLine();  // Consumir nueva línea
+                primerCampo = false;
+                break;
 
-        System.out.println("¿Deseas cambiar la promoción del producto? (s/n)");
-        if (scanner.nextLine().equalsIgnoreCase("s")) {
-            System.out.print("Ingresa la nueva promoción: ");
-            double nuevaPromocion = scanner.nextDouble();
-            if (!primerCampo) {
-                sql.append(", ");
-            }
-            sql.append("promocion = ").append(nuevaPromocion);
-            primerCampo = false;
-            scanner.nextLine();
-        }
+            case 3:
+                System.out.print("Ingrese el nuevo precio: ");
+                double nuevoPrecio = scanner.nextDouble();
+                sql.append("precio = ").append(nuevoPrecio);
+                scanner.nextLine();  // Consumir nueva línea
+                primerCampo = false;
+                break;
 
-        System.out.println("¿Deseas cambiar la categoría del producto? (s/n)");
-        if (scanner.nextLine().equalsIgnoreCase("s")) {
-            System.out.print("Ingresa el nuevo ID de la categoría: ");
-            int nuevaCategoria = scanner.nextInt();
-            if (!primerCampo) {
-                sql.append(", ");
-            }
-            sql.append("id_categoria = ").append(nuevaCategoria);
-            scanner.nextLine();  // Consumir nueva línea
+            case 4:
+                System.out.print("Ingrese la nueva promoción: ");
+                double nuevaPromocion = scanner.nextDouble();
+                sql.append("promocion = ").append(nuevaPromocion);
+                scanner.nextLine();  // Consumir nueva línea
+                primerCampo = false;
+                break;
+
+            case 5:
+                System.out.print("Ingrese el nuevo ID de la categoría: ");
+                int nuevaCategoria = scanner.nextInt();
+                sql.append("id_categoria = ").append(nuevaCategoria);
+                scanner.nextLine();  // Consumir nueva línea
+                break;
+
+            default:
+                System.out.println("Opción inválida.");
+                return;  // Salir del método si la opción no es válida
         }
 
         sql.append(" WHERE codigo = ").append(codigoProducto);

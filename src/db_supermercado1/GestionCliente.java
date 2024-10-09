@@ -4,10 +4,13 @@
  */
 package db_supermercado1;
 
+
 /**
  *
  * @author luisd
  */
 public class GestionCliente {
     
+   
+   
 }
