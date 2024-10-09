@@ -12,10 +12,11 @@ public class Producto {
 
     private int idProducto;
     private String nombreProducto;
-    private double codigo;
+    private int codigo;
     private double promocion;
     private double precio;
     private int idCategoria;
+    private String nombreCategoria;
 
     public Producto() {
     }
@@ -25,29 +26,38 @@ public class Producto {
         this.nombreProducto = nombreProducto;
     }
 
-    public Producto(String nombreProducto, double codigo, double promocion, double precio, int idCategoria) {
+    public Producto(String nombreProducto, int codigo, double promocion, double precio, int idCategoria) {
         this.nombreProducto = nombreProducto;
         this.codigo = codigo;
         this.promocion = promocion;
         this.precio = precio;
         this.idCategoria = idCategoria;
     }
-    
 
-    public Producto(String nombreProducto, double codigo, double promocion, double precio) {
+    public Producto(String nombreProducto, int codigo, double promocion, double precio) {
         this.nombreProducto = nombreProducto;
         this.codigo = codigo;
         this.promocion = promocion;
         this.precio = precio;
     }
 
-    public Producto(int idProducto, String nombreProducto, double codigo, double promocion, double precio, int idCategoria) {
+    public Producto(int idProducto, String nombreProducto, int codigo, double promocion, double precio, int idCategoria) {
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
         this.codigo = codigo;
         this.promocion = promocion;
         this.precio = precio;
         this.idCategoria = idCategoria;
+    }
+
+    public Producto(int idProducto, String nombreProducto, int codigo, double promocion, double precio, int idCategoria, String nombreCategoria) {
+        this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
+        this.codigo = codigo;
+        this.promocion = promocion;
+        this.precio = precio;
+        this.idCategoria = idCategoria;
+        this.nombreCategoria = nombreCategoria;
     }
 
     public int getIdProducto() {
@@ -66,11 +76,11 @@ public class Producto {
         this.nombreProducto = nombreProducto;
     }
 
-    public double getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(double codigo) {
+    public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
 
@@ -98,5 +108,18 @@ public class Producto {
         this.idCategoria = idCategoria;
     }
 
-    
+    public String getNombreCategoria() {
+        return nombreCategoria;
+    }
+
+    public void setNombreCategoria(String nombreCategoria) {
+        this.nombreCategoria = nombreCategoria;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Código: %s, Nombre: %s, Precio: Q%.2f, Promoción: Q%.2f, ID Categoría: %d, Nombre Categoría: %s",
+                codigo, nombreProducto, precio, promocion, idCategoria, nombreCategoria);
+    }
+
 }

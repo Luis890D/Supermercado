@@ -19,11 +19,7 @@ import java.util.List;
  */
 public class ClientesDAO {
 
-    private Connection conn;
-
-    public ClientesDAO() {
-        this.conn = DBConnection.getConnection();
-    }
+    Connection conn = DBConnection.getConnection();
 
     public List<Clientes> getClientes() {
 
@@ -41,11 +37,12 @@ public class ClientesDAO {
                 int idCliente = rs.getInt("id_cliente");
                 String nombreCliente = rs.getString("nombre_cliente");
                 String apellidoCliente = rs.getString("apellido_cliente");
-                String direccion = rs.getString("dirección");
+                String nit = rs.getString("nit");
+                String direccion = rs.getString("direccion");
                 String correoElectronico = rs.getString("correo_electronico");
                 String numeroTelefonico = rs.getString("numero_telefonico");
 
-                Clientes cliente = new Clientes(idCliente, nombreCliente, apellidoCliente, direccion, correoElectronico, numeroTelefonico);
+                Clientes cliente = new Clientes(idCliente, nombreCliente, apellidoCliente, nit, direccion, correoElectronico, numeroTelefonico);
 
                 Cliente.add(cliente);
 
@@ -62,7 +59,7 @@ public class ClientesDAO {
     public void addClientes(Clientes cliente) {
 
         // DEFINIR LA SENTENCIA DE SQL PARA HACER INSERTAR EN LA TABLA
-        String sql = "INSERT INTO Clientes (nombre_cliente, apellido_cliente, dirección, correo_electronico, numero_telefonico) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO clientes (nombre_cliente, apellido_cliente, nit, direccion, correo_electronico, numero_telefonico) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
 
@@ -70,9 +67,10 @@ public class ClientesDAO {
 
             stmt.setString(1, cliente.getNombreCliente());
             stmt.setString(2, cliente.getApellidoCliente());
-            stmt.setString(3, cliente.getDireccion());
-            stmt.setString(4, cliente.getCorreoElectronico());
-            stmt.setString(5, cliente.getNumeroTelefonico());
+            stmt.setString(3, cliente.getNit());
+            stmt.setString(4, cliente.getDireccion());
+            stmt.setString(5, cliente.getCorreoElectronico());
+            stmt.setString(6, cliente.getNumeroTelefonico());
 
             stmt.executeUpdate();
 
@@ -85,21 +83,24 @@ public class ClientesDAO {
     }
 
     public void updateClientes(Clientes cliente) {
-        String sql = "UPDATE clientes SET nombre = ?, apellido = ?, direccion = ?, correoElectronico = ?, numeroTelefonico = ? WHERE id = ?";
+        String sql = "UPDATE clientes SET nombre_cliente = ?, apellido_cliente = ?, nit = ?, direccion = ?, correo_electronico = ?, numero_telefonico = ? WHERE id_cliente = ?";
 
         try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, cliente.getNombreCliente());
             pstmt.setString(2, cliente.getApellidoCliente());
-            pstmt.setString(3, cliente.getDireccion());
-            pstmt.setString(4, cliente.getCorreoElectronico());
-            pstmt.setString(5, cliente.getNumeroTelefonico());
-            pstmt.setInt(6, cliente.getIdCliente());
+            pstmt.setString(3, cliente.getNit());
+            pstmt.setString(4, cliente.getDireccion());
+            pstmt.setString(5, cliente.getCorreoElectronico());
+            pstmt.setString(6, cliente.getNumeroTelefonico());
+            pstmt.setInt(7, cliente.getIdCliente());
 
             pstmt.executeUpdate();
 
+            System.out.println("Cliente ACTUALIZADO correctamente.");
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error al actualizar cliente: " + e.getMessage());
         }
     }
 }

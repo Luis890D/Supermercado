@@ -13,25 +13,28 @@ public class Clientes {
     private int idCliente;
     private String nombreCliente;
     private String apellidoCliente;
+    private String nit;
     private String direccion;
     private String correoElectronico;
     private String numeroTelefonico;
 
     public Clientes() {
     }
-    
-    public Clientes(String nombreCliente, String apellidoCliente, String direccion, String correoElectronico, String numeroTelefonico) {
+
+    public Clientes(String nombreCliente, String apellidoCliente, String nit, String direccion, String correoElectronico, String numeroTelefonico) {
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
+        this.nit = nit;
         this.direccion = direccion;
         this.correoElectronico = correoElectronico;
         this.numeroTelefonico = numeroTelefonico;
     }
 
-    public Clientes(int idCliente, String nombreCliente, String apellidoCliente, String direccion, String correoElectronico, String numeroTelefonico) {
+    public Clientes(int idCliente, String nombreCliente, String apellidoCliente, String nit, String direccion, String correoElectronico, String numeroTelefonico) {
         this.idCliente = idCliente;
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
+        this.nit = nit;
         this.direccion = direccion;
         this.correoElectronico = correoElectronico;
         this.numeroTelefonico = numeroTelefonico;
@@ -59,6 +62,14 @@ public class Clientes {
 
     public void setApellidoCliente(String apellidoCliente) {
         this.apellidoCliente = apellidoCliente;
+    }
+
+    public String getNit() {
+        return nit;
+    }
+
+    public void setNit(String nit) {
+        this.nit = nit;
     }
 
     public String getDireccion() {

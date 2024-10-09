@@ -4,6 +4,8 @@
  */
 package db_supermercado1;
 
+import db_supermercado1.dao.CategoriaDAO;
+import db_supermercado1.dao.ProductoDAO;
 import java.util.Scanner;
 
 /**
@@ -12,12 +14,12 @@ import java.util.Scanner;
  */
 public class GestionInventario {
 
-    private mnProducto productoManager;
-    private mnCategoria categoriaManager;
+    private ProductoDAO productoDAO;
+    private CategoriaDAO categoriaDAO;
 
     public GestionInventario() {
-        productoManager = new mnProducto();
-        categoriaManager = new mnCategoria();
+        productoDAO = new ProductoDAO();  // Utiliza ProductoDAO
+        categoriaDAO = new CategoriaDAO();  // Utiliza CategoriaDAO
     }
 
     public void iniciar() {
@@ -50,10 +52,10 @@ public class GestionInventario {
     }
 
     private void gestionarProductos() {
-        productoManager.iniciar();
+        productoDAO.iniciar();
     }
 
     private void gestionarCategorias() {
-        categoriaManager.iniciar();
+        categoriaDAO.iniciar();
     }
 }
