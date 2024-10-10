@@ -10,30 +10,36 @@ import java.util.Date;
  *
  * @author luisd
  */
+
 public class Inventario {
-    
+
     private int idInventario;
     private int idCategoria;
-    private String Description;
-    private Date Fecha;
+    private int cantidad;
+    private String descripcion; // Ajuste: nombres de variables en español y en minúscula
+    private Date fecha;
     private int idEmpleado;
 
+    // Constructor vacío
     public Inventario() {
     }
 
-    public Inventario(String Description, Date Fecha) {
-        this.Description = Description;
-        this.Fecha = Fecha;
+    // Constructor con descripción y fecha
+    public Inventario(String descripcion, Date fecha) {
+        this.descripcion = descripcion;
+        this.fecha = fecha;
     }
 
-    public Inventario(int idInventario, int idCategoria, String Description, Date Fecha, int idEmpleado) {
+    // Constructor completo
+    public Inventario(int idInventario, int idCategoria, String descripcion, Date fecha, int idEmpleado) {
         this.idInventario = idInventario;
         this.idCategoria = idCategoria;
-        this.Description = Description;
-        this.Fecha = Fecha;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
         this.idEmpleado = idEmpleado;
     }
 
+    // Getters y Setters
     public int getIdInventario() {
         return idInventario;
     }
@@ -50,20 +56,20 @@ public class Inventario {
         this.idCategoria = idCategoria;
     }
 
-    public String getDescription() {
-        return Description;
+    public String getDescripcion() { // Ajuste: nombre en minúscula
+        return descripcion;
     }
 
-    public void setDescription(String Description) {
-        this.Description = Description;
+    public void setDescripcion(String descripcion) { // Ajuste: nombre en minúscula
+        this.descripcion = descripcion;
     }
 
     public Date getFecha() {
-        return Fecha;
+        return fecha;
     }
 
-    public void setFecha(Date Fecha) {
-        this.Fecha = Fecha;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     public int getIdEmpleado() {
@@ -74,5 +80,11 @@ public class Inventario {
         this.idEmpleado = idEmpleado;
     }
 
-    
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
 }

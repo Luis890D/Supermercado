@@ -15,30 +15,11 @@ public class Producto {
     private int codigo;
     private double promocion;
     private double precio;
+    private int existencias;
     private int idCategoria;
     private String nombreCategoria;
 
     public Producto() {
-    }
-
-    public Producto(int idProducto, String nombreProducto) {
-        this.idProducto = idProducto;
-        this.nombreProducto = nombreProducto;
-    }
-
-    public Producto(String nombreProducto, int codigo, double promocion, double precio, int idCategoria) {
-        this.nombreProducto = nombreProducto;
-        this.codigo = codigo;
-        this.promocion = promocion;
-        this.precio = precio;
-        this.idCategoria = idCategoria;
-    }
-
-    public Producto(String nombreProducto, int codigo, double promocion, double precio) {
-        this.nombreProducto = nombreProducto;
-        this.codigo = codigo;
-        this.promocion = promocion;
-        this.precio = precio;
     }
 
     public Producto(int idProducto, String nombreProducto, int codigo, double promocion, double precio, int idCategoria) {
@@ -49,6 +30,7 @@ public class Producto {
         this.precio = precio;
         this.idCategoria = idCategoria;
     }
+    
 
     public Producto(int idProducto, String nombreProducto, int codigo, double promocion, double precio, int idCategoria, String nombreCategoria) {
         this.idProducto = idProducto;
@@ -58,6 +40,14 @@ public class Producto {
         this.precio = precio;
         this.idCategoria = idCategoria;
         this.nombreCategoria = nombreCategoria;
+    }
+
+    public int getExistencias() {
+        return existencias;
+    }
+
+    public void setExistencias(int existencias) {
+        this.existencias = existencias;
     }
 
     public int getIdProducto() {

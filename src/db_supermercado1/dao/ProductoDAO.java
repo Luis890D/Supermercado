@@ -22,6 +22,21 @@ public class ProductoDAO {
 
     Connection conn = DBConnection.getConnection();
 
+    // Método para verificar si un producto existe por su código
+    public boolean productoExiste(int codigoProducto) {
+        String sql = "SELECT COUNT(*) FROM Productos WHERE codigo = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, codigoProducto);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Devuelve verdadero si existe al menos un producto
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al verificar existencia del producto: " + e.getMessage());
+        }
+        return false;
+    }
+
     // Método para obtener todos los productos de la base de datos
     public List<Producto> getProducto() {
         List<Producto> productos = new ArrayList<>();
@@ -207,6 +222,25 @@ public class ProductoDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error al eliminar el producto: " + e.getMessage());
+        }
+    }
+
+    public void agregarExistencias(int codigoProducto, int cantidad) {
+        String sql = "UPDATE Productos SET existencias = existencias + ? WHERE codigo = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, cantidad);
+            stmt.setInt(2, codigoProducto);
+
+            System.out.println("Agregando " + cantidad + " a las existencias del producto con código " + codigoProducto);
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Existencias actualizadas con éxito!");
+            } else {
+                System.out.println("No se encontró el producto con el código especificado.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al agregar existencias: " + e.getMessage());
         }
     }
 

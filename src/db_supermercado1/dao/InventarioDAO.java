@@ -5,11 +5,14 @@
 package db_supermercado1.dao;
 
 import db_supermercado1.DBConnection;
+import db_supermercado1.modelo.Categoria;
+import db_supermercado1.modelo.Empleado;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -19,98 +22,211 @@ import java.util.Scanner;
 public class InventarioDAO {
 
     Connection conn = DBConnection.getConnection();
-    EmpleadoDAO empleadoDAO = new EmpleadoDAO(); // Instancia de EmpleadoDAO
-    CategoriaDAO categoriaDAO = new CategoriaDAO(); // Instancia de CategoriaDAO
+    private ProductoDAO productoDAO = new ProductoDAO();
+    private CategoriaDAO categoriaDAO = new CategoriaDAO();
+    private EmpleadoDAO empleadoDAO = new EmpleadoDAO();
 
-    // Método para agregar un nuevo registro en el inventario
-    public void agregarRegistro(int idCategoria, String descripcion, int idEmpleado) {
-        // Verifica si el empleado existe
-        if (empleadoDAO.getAllEmpleados().stream().noneMatch(emp -> emp.getIdEmpleado() == idEmpleado)) {
-            System.out.println("Empleado no encontrado.");
+    public void mostrarInventario() {
+        System.out.println("=== Inventario ===");
+        List<Categoria> categorias = categoriaDAO.getCategoria();
+
+        for (Categoria categoria : categorias) {
+            int totalProductos = contarProductosPorCategoria(categoria.getIdCategoria());
+            int totalExistencias = contarExistenciasPorCategoria(categoria.getIdCategoria()); // Nueva línea para contar existencias
+            System.out.printf("Categoría: %s, Total de productos: %d, Total de existencias: %d%n",
+                    categoria.getNombreCategoria(), totalProductos, totalExistencias);
+        }
+    }
+
+    private int contarExistenciasPorCategoria(int idCategoria) {
+        String sql = "SELECT SUM(existencias) FROM Productos WHERE id_categoria = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idCategoria);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar existencias: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    private int contarProductosPorCategoria(int idCategoria) {
+        String sql = "SELECT COUNT(*) FROM Productos WHERE id_categoria = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idCategoria);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al contar productos: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    public void agregarProducto(String nombreProducto, int codigo, double promocion, double precio, int idCategoria) {
+        productoDAO.addProducto(nombreProducto, codigo, promocion, precio, idCategoria);
+    }
+
+    public void actualizarExistencia(int codigoProducto, int cantidad, String usuario, String motivo, boolean aumentar) {
+        if (!productoDAO.productoExiste(codigoProducto)) {
+            System.out.println("No se encontró el producto con el código especificado.");
             return;
         }
 
-        String sql = "INSERT INTO Inventario (id_categoria, descripcion, fecha, id_empleado) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, idCategoria);
-            pstmt.setString(2, descripcion);
-            pstmt.setTimestamp(3, new Timestamp(System.currentTimeMillis())); // Fecha y hora actual
-            pstmt.setInt(4, idEmpleado);
-            pstmt.executeUpdate();
-            System.out.println("Registro de inventario agregado con éxito.");
-        } catch (SQLException e) {
-            System.out.println("Error al agregar el registro: " + e.getMessage());
-        }
-    }
+        String sql = "UPDATE Productos SET existencias = existencias " + (aumentar ? "+" : "-") + " ? WHERE codigo = ?";
+        System.out.printf("Consulta SQL: %s, Cantidad: %d, Código Producto: %d%n", sql, cantidad, codigoProducto); // Debug
 
-    // Método para mostrar registros del inventario
-    public void mostrarInventario() {
-        String sql = "SELECT * FROM Inventario";
-        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            System.out.println("Listado de Registros de Inventario:");
-            while (rs.next()) {
-                int idInventario = rs.getInt("id_inventario");
-                int idCategoria = rs.getInt("id_categoria");
-                String descripcion = rs.getString("descripcion");
-                Timestamp fecha = rs.getTimestamp("fecha");
-                int idEmpleado = rs.getInt("id_empleado");
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, cantidad);
+            stmt.setInt(2, codigoProducto);
 
-                System.out.println("ID: " + idInventario + ", Categoría: " + idCategoria
-                        + ", Descripción: " + descripcion + ", Fecha: " + fecha + ", Empleado ID: " + idEmpleado);
+            int rowsUpdated = stmt.executeUpdate();
+            System.out.printf("Filas actualizadas: %d%n", rowsUpdated); // Debug
+            if (rowsUpdated > 0) {
+                System.out.println("Existencias actualizadas con éxito!");
+                System.out.printf("Usuario: %s, Motivo: %s, Cantidad %s: %d%n", usuario, motivo, aumentar ? "aumentada" : "disminuida", cantidad);
+            } else {
+                System.out.println("No se encontró el producto con el código especificado.");
             }
         } catch (SQLException e) {
-            System.out.println("Error al mostrar el inventario: " + e.getMessage());
+            System.out.println("Error al actualizar existencias: " + e.getMessage());
         }
     }
 
-    // Método para mostrar categorías
-    public void mostrarCategorias() {
-        categoriaDAO.mostrarCategorias(); // Usar el método de CategoriaDAO
+    public void eliminarProducto(int codigoProducto) {
+        productoDAO.deleteProducto(codigoProducto);
     }
 
-    // Método para iniciar el menú de gestión de inventario
+    // Método para iniciar la interacción del usuario
     public void iniciar() {
         Scanner scanner = new Scanner(System.in);
-        int opcion;
+        int opcion = 0;
 
         do {
             System.out.println("\n=== Gestión de Inventario ===");
-            System.out.println("1. Agregar registro de inventario");
-            System.out.println("2. Mostrar registros de inventario");
-            System.out.println("3. Mostrar categorías");
-            System.out.println("4. Volver atrás");
+            System.out.println("1. Mostrar inventario");
+            System.out.println("2. Agregar producto");
+            System.out.println("3. Actualizar existencias");
+            System.out.println("4. Eliminar producto");
+            System.out.println("5. Volver atrás");
             System.out.print("Selecciona una opción: ");
-            opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir nueva línea
+
+            opcion = obtenerOpcion(scanner); // Método para obtener la opción
 
             switch (opcion) {
                 case 1:
-                    System.out.print("Ingresa el ID de la categoría: ");
-                    int idCategoria = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("Ingresa la descripción: ");
-                    String descripcion = scanner.nextLine();
-                    System.out.print("Ingresa el ID del empleado: ");
-                    int idEmpleado = scanner.nextInt();
-                    agregarRegistro(idCategoria, descripcion, idEmpleado);
-                    break;
-
-                case 2:
                     mostrarInventario();
                     break;
 
+                case 2:
+                    agregarProducto(scanner);
+                    break;
+
                 case 3:
-                    mostrarCategorias();
+                    actualizarExistencias(scanner);
                     break;
 
                 case 4:
+                    eliminarProducto(scanner);
+                    break;
+
+                case 5:
                     System.out.println("Volviendo atrás...");
                     break;
 
                 default:
-                    System.out.println("Opción inválida. Intenta nuevamente.");
+                    System.out.println("Opción inválida. Inténtalo nuevamente.");
                     break;
             }
-        } while (opcion != 4);
+        } while (opcion != 5);
+    }
+
+    private int obtenerOpcion(Scanner scanner) {
+        while (true) {
+            try {
+                int opcion = scanner.nextInt();
+                scanner.nextLine(); // Consumir nueva línea
+                return opcion;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, ingresa un número.");
+                scanner.nextLine(); // Limpiar el buffer
+            }
+        }
+    }
+
+    private void agregarProducto(Scanner scanner) {
+        System.out.print("Ingresa el nombre del producto: ");
+        String nombreProducto = scanner.nextLine();
+        System.out.print("Ingresa el código del producto: ");
+        int codigo = obtenerNumero(scanner);
+        System.out.print("Ingresa el precio del producto: ");
+        double precio = obtenerDecimal(scanner);
+        System.out.print("Ingresa la promoción del producto: ");
+        double promocion = obtenerDecimal(scanner);
+        System.out.print("Ingresa el id de la categoría: ");
+        int idCategoria = obtenerNumero(scanner);
+        agregarProducto(nombreProducto, codigo, promocion, precio, idCategoria);
+    }
+
+    private void actualizarExistencias(Scanner scanner) {
+        System.out.print("Ingresa el código del empleado: ");
+        String codigoEmpleado = scanner.nextLine();
+        Empleado empleado = empleadoDAO.getEmpleadoByCodigo(codigoEmpleado);
+
+        if (empleado == null) {
+            System.out.println("No se encontró un empleado con el código ingresado.");
+            return;
+        }
+
+        System.out.print("Ingresa el código del producto a actualizar existencias: ");
+        int codigoProducto = obtenerNumero(scanner);
+        System.out.print("Ingresa la cantidad a actualizar (puede ser negativa para reducir): ");
+        int cantidad = obtenerNumero(scanner);
+        scanner.nextLine();
+        System.out.print("Ingresa el motivo de la actualización: ");
+        String motivo = scanner.nextLine();
+
+        // Actualizar existencias usando el nombre del empleado
+        actualizarExistencia(codigoProducto, cantidad, empleado.getNombreEmpleado(), motivo, cantidad > 0);
+    }
+
+    private void eliminarProducto(Scanner scanner) {
+        System.out.print("Ingresa el código del producto a eliminar: ");
+        int codigoProducto = obtenerNumero(scanner);
+
+        // Confirmar eliminación
+        System.out.print("¿Estás seguro de que deseas eliminar el producto con el código " + codigoProducto + "? (s/n): ");
+        String confirmacion = scanner.nextLine();
+
+        if (confirmacion.equalsIgnoreCase("s")) {
+            eliminarProducto(codigoProducto);
+        } else {
+            System.out.println("Eliminación cancelada.");
+        }
+    }
+
+    private int obtenerNumero(Scanner scanner) {
+        while (true) {
+            try {
+                return scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, ingresa un número.");
+                scanner.nextLine(); // Limpiar el buffer
+            }
+        }
+    }
+
+    private double obtenerDecimal(Scanner scanner) {
+        while (true) {
+            try {
+                return scanner.nextDouble();
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, ingresa un número decimal.");
+                scanner.nextLine(); // Limpiar el buffer
+            }
+        }
     }
 }

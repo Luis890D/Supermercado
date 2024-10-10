@@ -5,6 +5,8 @@
 package db_supermercado1;
 
 import db_supermercado1.dao.EmpleadoDAO;
+import db_supermercado1.dao.InventarioDAO;
+
 
 /**
  *
@@ -18,9 +20,12 @@ public class app_Supermercado1 {
     public static void main(String[] args) {
 
         //GestionInventario gestion = new GestionInventario();
-       // gestion.iniciar();
+        //gestion.iniciar();
         
-        EmpleadoDAO menu = new EmpleadoDAO();
+        //EmpleadoDAO menu = new EmpleadoDAO();
+        //menu.iniciar();
+        
+        InventarioDAO menu = new InventarioDAO();
         menu.iniciar();
     }
 

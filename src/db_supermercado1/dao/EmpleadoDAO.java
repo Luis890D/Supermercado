@@ -125,7 +125,7 @@ public class EmpleadoDAO {
     public void iniciar() {
         Scanner scanner = new Scanner(System.in);
         int opcion;
-        SimpleDateFormat formato = new SimpleDateFormat("hh:mm a"); // Mover aquí para evitar duplicación
+        SimpleDateFormat formato = new SimpleDateFormat("HH:mm"); // Cambiar formato a 24 horas
 
         do {
             System.out.println("\n=== Gestión de Empleados ===");
@@ -136,11 +136,10 @@ public class EmpleadoDAO {
             System.out.println("5. Volver atrás");
             System.out.print("Selecciona una opción: ");
             opcion = scanner.nextInt();
-            scanner.nextLine();  // Consumir nueva línea
+            scanner.nextLine();
 
             switch (opcion) {
-                case 1: // Agregar empleado
-                    // Solicitar datos...
+                case 1:
                     Empleado nuevoEmpleado = crearEmpleadoDesdeEntrada(scanner, formato);
                     if (nuevoEmpleado != null) {
                         addEmpleado(nuevoEmpleado);
@@ -202,14 +201,14 @@ public class EmpleadoDAO {
         String direccion = scanner.nextLine();
         System.out.print("Ingresa el número de teléfono del empleado: ");
         String numeroTelefono = scanner.nextLine();
-        System.out.print("Ingresa la fecha y hora de horario del empleado (hh:mm a): ");
+        System.out.print("Ingresa la hora del horario del empleado (HH:mm): ");
         String horarioStr = scanner.nextLine();
 
         java.util.Date horarioDate = null;
         try {
             horarioDate = formato.parse(horarioStr);
         } catch (ParseException e) {
-            System.out.println("Formato de horario incorrecto. Asegúrate de usar hh:mm AM/PM.");
+            System.out.println("Formato de horario incorrecto. Asegúrate de usar HH:mm.");
             return null; // Indicar que hubo un error
         }
 
