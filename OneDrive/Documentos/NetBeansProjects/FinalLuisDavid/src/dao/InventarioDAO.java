@@ -10,7 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import modelo.Producto;
 
 /**
  *
@@ -63,9 +65,6 @@ public class InventarioDAO {
         return 0;
     }
 
-//    public void agregarProducto(String nombreProducto, int codigo, double promocion, double precio, int idCategoria) {
-//        productoDAO.addProducto(nombreProducto, codigo, promocion, precio, idCategoria);
-//    }
     public void actualizarExistencia(int codigoProducto, int cantidad, String usuario, String motivo, boolean aumentar) {
         if (!productoDAO.productoExiste(codigoProducto)) {
             System.out.println("No se encontró el producto con el código especificado.");
@@ -96,4 +95,29 @@ public class InventarioDAO {
         productoDAO.deleteProducto(codigoProducto);
     }
 
+    public List<Producto> obtenerModificaciones() {
+        List<Producto> productosModificados = new ArrayList<>();
+        String sql = "SELECT p.*, c.nombre_categoria FROM Productos p "
+                + "JOIN Categoria c ON p.id_categoria = c.id_categoria "
+                + "WHERE p.existencias <> (SELECT existencias FROM Productos WHERE codigo = p.codigo)"; // Ajusta según tu lógica
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Producto producto = new Producto(
+                        rs.getInt("idProducto"),
+                        rs.getString("nombreProducto"),
+                        rs.getInt("codigo"),
+                        rs.getDouble("promocion"),
+                        rs.getDouble("precio"),
+                        rs.getInt("id_categoria"),
+                        rs.getString("nombre_categoria") // Obtener el nombre de la categoría
+                );
+                producto.setExistencias(rs.getInt("existencias")); // Asignar existencias
+                productosModificados.add(producto);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener modificaciones: " + e.getMessage());
+        }
+        return productosModificados;
+    }
 }

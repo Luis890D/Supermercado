@@ -5,7 +5,11 @@
 package Interfaces;
 
 import dao.InventarioDAO;
+import dao.ProductoDAO;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import modelo.Producto;
 
 /**
  *
@@ -141,6 +145,11 @@ public class GestionInventario extends javax.swing.JFrame {
         });
 
         jButton2.setText("Ver Modificaciones");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
@@ -304,8 +313,9 @@ public class GestionInventario extends javax.swing.JFrame {
         // Agregar Existencia
         String codigoStr = JOptionPane.showInputDialog("Ingrese el Código de Barras:");
         String cantidadStr = JOptionPane.showInputDialog("Ingrese la Cantidad a Agregar:");
+        String notaStr = JOptionPane.showInputDialog("Ingrese una Nota:");
 
-        if (codigoStr != null && cantidadStr != null) {
+        if (codigoStr != null && cantidadStr != null && notaStr != null) {
             int codigo = Integer.parseInt(codigoStr);
             int cantidad = Integer.parseInt(cantidadStr);
 
@@ -314,19 +324,42 @@ public class GestionInventario extends javax.swing.JFrame {
 
             // Actualizar la tabla de gestiones
             actualizarTabla();
+
+            // Agregar la nota en el JTextArea
+            jTextArea2.append("Nota: " + notaStr + "\n");
+        } else {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos.");
         }
     }
 
     private void actualizarTabla() {
-        // Aquí debes implementar la lógica para actualizar la tabla con los datos del inventario
-        // Por ejemplo, puedes llamar a un método en InventarioDAO que retorne los productos y los muestre en TableGestiones
-        // Para simplicidad, aquí solo se muestra un mensaje.
+        ProductoDAO productoDAO = new ProductoDAO();
+        List<Producto> productos = productoDAO.getProducto(); // Obtener todos los productos
+
+        // Limpiar la tabla existente
+        DefaultTableModel model = (DefaultTableModel) TableGestiones.getModel();
+        model.setRowCount(0); // Limpiar filas
+
+        // Agregar los datos a la tabla
+        for (Producto producto : productos) {
+            model.addRow(new Object[]{
+                producto.getCodigo(), // Código de barras (ID)
+                producto.getNombreProducto(), // Nombre del producto
+                producto.getNombreCategoria(), // Nombre de la categoría
+                producto.getExistencias(), // Cantidad
+                producto.getPrecio(), // Precio
+                null, // Imagen (no se proporciona)
+                "" // Nota (puedes dejarlo vacío o agregar lógica para mostrar notas si es necesario)
+            });
+        }
+
+        // Mensaje de confirmación
         JOptionPane.showMessageDialog(this, "Tabla de inventario actualizada.");
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        actualizarTabla();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -335,6 +368,31 @@ public class GestionInventario extends javax.swing.JFrame {
         su.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        InventarioDAO inventarioDAO = new InventarioDAO();
+        List<Producto> productosModificados = inventarioDAO.obtenerModificaciones();
+
+        // Limpiar la tabla existente
+        DefaultTableModel model = (DefaultTableModel) TableGestiones.getModel();
+        model.setRowCount(0); // Limpiar filas
+
+        // Agregar los datos actualizados a la tabla
+        for (Producto producto : productosModificados) {
+            model.addRow(new Object[]{
+                producto.getCodigo(), // Código de barras (ID)
+                producto.getNombreProducto(), // Nombre del producto
+                producto.getNombreCategoria(), // Nombre de la categoría
+                producto.getExistencias(), // Cantidad
+                producto.getPrecio(), // Precio
+            });
+        }
+
+        // Mensaje de confirmación
+        JOptionPane.showMessageDialog(this, "Tabla actualizada con las modificaciones.");
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
