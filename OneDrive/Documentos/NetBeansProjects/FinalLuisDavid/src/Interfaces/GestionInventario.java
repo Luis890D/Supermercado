@@ -4,6 +4,9 @@
  */
 package Interfaces;
 
+import dao.InventarioDAO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DELL
@@ -259,16 +262,67 @@ public class GestionInventario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        // Modificar Existencia
+        String codigoStr = JOptionPane.showInputDialog("Ingrese el Código de Barras del Producto a Modificar:");
+
+        if (codigoStr != null) {
+            int codigo = Integer.parseInt(codigoStr);
+            String cantidadStr = JOptionPane.showInputDialog("Ingrese la Cantidad a Modificar:");
+
+            if (cantidadStr != null) {
+                int cantidad = Integer.parseInt(cantidadStr);
+                InventarioDAO inventarioDAO = new InventarioDAO();
+                inventarioDAO.actualizarExistencia(codigo, cantidad, "Usuario", "Modificar Existencia", true);
+
+                // Actualizar la tabla de gestiones
+                actualizarTabla();
+            }
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        String codigoStr = JOptionPane.showInputDialog("Ingrese el Código de Barras del Producto a Editar:");
+
+        if (codigoStr != null) {
+            int codigo = Integer.parseInt(codigoStr);
+            // Aquí puedes mostrar los detalles del producto y permitir su edición.
+            // Por simplicidad, vamos a pedir solo la nueva cantidad.
+            String nuevaCantidadStr = JOptionPane.showInputDialog("Ingrese la Nueva Cantidad:");
+
+            if (nuevaCantidadStr != null) {
+                int nuevaCantidad = Integer.parseInt(nuevaCantidadStr);
+                InventarioDAO inventarioDAO = new InventarioDAO();
+                inventarioDAO.actualizarExistencia(codigo, nuevaCantidad, "Usuario", "Modificar Existencia", false);
+
+                // Actualizar la tabla de gestiones
+                actualizarTabla();
+            }
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        //        JOptionPane.showMessageDialog(null,"Imágen agregada con éxito");
+        // Agregar Existencia
+        String codigoStr = JOptionPane.showInputDialog("Ingrese el Código de Barras:");
+        String cantidadStr = JOptionPane.showInputDialog("Ingrese la Cantidad a Agregar:");
+
+        if (codigoStr != null && cantidadStr != null) {
+            int codigo = Integer.parseInt(codigoStr);
+            int cantidad = Integer.parseInt(cantidadStr);
+
+            InventarioDAO inventarioDAO = new InventarioDAO();
+            inventarioDAO.actualizarExistencia(codigo, cantidad, "Usuario", "Agregar Existencia", true);
+
+            // Actualizar la tabla de gestiones
+            actualizarTabla();
+        }
+    }
+
+    private void actualizarTabla() {
+        // Aquí debes implementar la lógica para actualizar la tabla con los datos del inventario
+        // Por ejemplo, puedes llamar a un método en InventarioDAO que retorne los productos y los muestre en TableGestiones
+        // Para simplicidad, aquí solo se muestra un mensaje.
+        JOptionPane.showMessageDialog(this, "Tabla de inventario actualizada.");
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -296,16 +350,24 @@ public class GestionInventario extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GestionInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionInventario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GestionInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionInventario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GestionInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionInventario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GestionInventario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionInventario.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

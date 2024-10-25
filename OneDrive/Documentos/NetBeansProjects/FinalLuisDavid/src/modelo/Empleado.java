@@ -23,6 +23,7 @@ public class Empleado {
 
     public Empleado() {
     }
+    
 
     public Empleado(String nombreEmpleado, String apellidoEmpleado, String codigo, String direccion, String numeroTelefono, Date horario) {
         this.nombreEmpleado = nombreEmpleado;
