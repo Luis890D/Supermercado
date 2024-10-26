@@ -6,11 +6,13 @@ package Interfaces;
 
 import dao.ClientesDAO;
 import dao.ProductoDAO;
+import java.util.ArrayList;
 import modelo.Producto;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Clientes;
+import modelo.DetallesVentas;
 
 /**
  *
@@ -21,6 +23,9 @@ public class Vender extends javax.swing.JFrame {
     /**
      * Creates new form Ventas
      */
+    ArrayList<DetallesVentas> listaProductos = new ArrayList<>();
+    private DetallesVentas producto;
+
     public Vender() {
 
         initComponents();
@@ -598,7 +603,7 @@ public class Vender extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Atrás;
-    private javax.swing.JTable JTableTotal;
+    public static javax.swing.JTable JTableTotal;
     private javax.swing.JToggleButton btnAggProductoExistente;
     private javax.swing.JButton btnCredito;
     private javax.swing.JButton btnDebito;
@@ -606,7 +611,7 @@ public class Vender extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    public static javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToggleButton jToggleButton2;
@@ -618,15 +623,15 @@ public class Vender extends javax.swing.JFrame {
     private javax.swing.JLabel lblVendedor2;
     private javax.swing.JLabel lblVendedor3;
     private javax.swing.JLabel lblVendedor4;
-    private javax.swing.JLabel lblVendedor5;
+    public static javax.swing.JLabel lblVendedor5;
     private javax.swing.JLabel lblVendedor6;
     private javax.swing.JLabel lblVendedor7;
     private javax.swing.JLabel lblVendedor8;
     private javax.swing.JTextField txtFnit;
     private javax.swing.JTextField txtFnit2;
     private javax.swing.JTextField txtNombreCliente;
-    private javax.swing.JTextField txtRecargoTotal;
+    public static javax.swing.JTextField txtRecargoTotal;
     private javax.swing.JTextField txtSubtotal;
-    private javax.swing.JTextField txtTOTAL;
+    public static javax.swing.JTextField txtTOTAL;
     // End of variables declaration//GEN-END:variables
 }
